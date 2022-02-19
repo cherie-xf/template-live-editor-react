@@ -1,0 +1,24 @@
+#root, .App, .editor, iframe {
+  height: 100%;
+  width: 100%;
+}
+.App {
+  padding: 50px;
+}
+.previewContainer{
+  width: calc( 100% - 100px);
+  height: calc( 100% - 100px)
+}
+
+
+.previewContainer {
+  display: flex;
+}
+.editor{
+  flex: 1;
+  width: 50%;
+}
+.preview {
+  flex: 1;
+  width: 50%;
+}
