@@ -1,46 +1,58 @@
 import * as Handlebars from 'handlebars';
 import PreviewFrame from './PreviewFrame';
 import AceEditor from 'react-ace';
-import { template as email } from './template';
 import { useEffect, useState } from 'react';
+import data from './data.json';
 
 import 'brace/mode/handlebars';
 import 'brace/theme/monokai';
 import 'brace/ext/searchbox';
 import 'brace/ext/language_tools';
 
-interface state {
-  value: string;
-}
-
-interface props {}
-
 export const HandleBarPreview = () => {
-  const [value, setValue] = useState<string>(email);
+  const [value, setValue] = useState<string>('');
   const [html, setHtml] = useState<string>('');
   const handleChange = (val: string) => {
     setValue(val);
   };
-  useEffect(() => {
-    const template = Handlebars.compile(value);
+
+  const getHtmlFromValue = () => {
     let html = '';
-    try {
-      html = template({
-        name: 'Tobias',
-        surname: 'Piskula',
-        action_url: 'jg.or.at/xxx'
-      });
-    } catch (e) {
-      html = value;
-    }
+    const template = Handlebars.compile(value);
+    console.log('data', data[0]);
+    html = template({
+      name: 'Tobias',
+      surname: 'Piskula',
+      action_url: 'jg.or.at/xxx',
+      year: new Date().getFullYear(),
+      dataObj: data[0]
+    });
     setHtml(html);
+  };
+  useEffect(() => {
+    const readTemplateFile = async () => {
+      const content = await fetch('edr-privision-tmp.hbs').then(result =>
+        result.text()
+      );
+      setValue(content);
+    };
+    readTemplateFile()
+      .then(() => {
+        getHtmlFromValue();
+      })
+      .catch(console.error);
+  }, []);
+
+  useEffect(() => {
+    getHtmlFromValue();
   }, [value]);
+
   return (
     <div className="previewContainer">
       <AceEditor
         mode="handlebars"
         theme="monokai"
-        name="blah2"
+        name="my_editer_id"
         className="editor"
         //onLoad={this.onLoad}
         onChange={handleChange}
