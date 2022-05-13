@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import './App.css';
-import { HandleBarPreview } from './HandleBarPreview';
+import { HtmlPreview } from './faz/HtmlPreview';
+// import { HandleBarPreview } from './HandleBarPreview';
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <div className="App">
-      <HandleBarPreview />
+      {/* <HandleBarPreview /> */}
+      <HtmlPreview />
     </div>
   );
 }

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <table borderSize="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;width:100%;background-color:#efefef; font-size: 14px;" width="100%">
+    <tbody>
+      <tr height='20'></tr>
+      <tr>
+      <td></td>
+      <td style="width: 700px; min-width: 700px; background-color: #f7f7f7; font-size: 15px; color: #000;">
+        <table borderSize="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:separate;">
+          <tbody><tr>
+            <td width='20'></td>
+            <td>
+            <table borderSize="0" cellpadding="0" cellspacing="0" width="100%"
+              style="border-collapse:separate; line-height: 18px; font-size: 18px; border-bottom: 2px solid #dfdfdf;" >
+              <tbody>
+                <tr height='20'></tr>
+                <tr>
+                  <td style="padding-right: 10px; border-right: 2px solid #000; width: 1%;">
+                    <img src="cid:fortinet_logo" height="18" width="135">
+                  </td>
+                  <td width='10'></td>
+                  {% if portal_type %}
+                  <td style="paddingLeft: 12px;">{{ portal_type }} Cloud</td>
+                  {% else %}
+                  <td style="paddingLeft: 12px;">FortiCloud</td>
+                  {% endif %}
+                </tr>
+                <tr height='20'></tr>
+              </tbody>
+            </table></td>
+            <td width='20'></td>
+          </tr></tbody>
+        </table>
+
+        <table borderSize="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:separate;" >
+          <tbody>
+              <tr><td style="padding: 20px 20px 0 20px;">
+              <table borderSize="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:separate;">
+                <tr><td style="padding: 25px; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; background-color: #fff;">
+                  <table borderSize="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;" width="100%">
+                    <tr>
+                    <td width="50">
+                      <img src="cid:alert_icon" height='50' width="50">
+                    </td>
+                    <td width="30"></td>
+                    <td>
+                      <table borderSize="0" cellpadding="0" cellspacing="0" style="border-collapse:separate; font-size: 12px;" height="100%">
+                        <tbody>
+                          <tr>
+                            <td>
+                              <div style="font-size: 22px;font-weight: bold;">{{ header }}</div>
+                            </td>
+                          </tr>
+                          {% if sub_header %}
+                          <tr>
+                            <td>
+                              <div style="color: #444;">
+                              {{ sub_header }}
+                              </div>
+                            </td>
+                          </tr>
+                          {% endif %}
+                        </tbody>
+                      </table>
+                    </td>
+                    </tr>
+                  </table>
+                </td></tr>
+
+                <tr><td style="padding: 30px 15px;line-height: 25px;">
+                  <table borderSize="0" cellpadding="0" cellspacing="0" style="border-collapse:separate;" width="100%">
+                    <tbody>
+                      <tr>
+                        <td style="padding-bottom: 15px;">
+                          Dear {{ name }},
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding-bottom: 15px;">
+                          &nbsp; &nbsp; &nbsp; &nbsp;
+                          {{ contents|safe|urlize }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          Sincerely,
+                          <br>
+                          The Fortinet Team
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td></tr>
+              </table>
+              </td></tr>
+          </tbody>
+        </table>
+
+        <table borderSize="0" cellpadding="0" cellspacing="0" style="border-collapse:separate; color: #bfbfbf; font-size: 12px; padding: 10px 20px 10px 20px; background-color: #000;" width="100%">
+          <tbody>
+              <tr>
+              <td style="white-space: nowrap; width: 50%;">Copyright © {% now 'Y' %} Fortinet, Inc. All Rights Reserved.</td>
+              <td style="text-align: right;white-space: nowrap;">
+                {% if footnote_email %}
+                <span style="margin-right: 20px;">Email: {{footnote_email}}</span>
+                {% endif %}
+                {% if footnote_phone %}
+                <span>Phone: {{footnote_phone}}</span>
+                {% endif %}
+              </td>
+              </tr>
+          </tbody>
+        </table>
+      </td>
+      <td></td>
+      </tr>
+      <tr height='20'></tr>
+  </tbody>
+  </table>
+</body>
+</html>

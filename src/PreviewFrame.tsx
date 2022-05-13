@@ -9,6 +9,10 @@ export default function PreviewFrame(props: Props) {
   const frameRef = useRef<HTMLIFrameElement>(null);
   const { content, frameStyle, stylesheets } = props;
 
+  const handleMouseUp = (event: MouseEvent) => {
+    console.log(event.target);
+  };
+
   useEffect(() => {
     if (frameRef.current && frameRef.current.contentDocument) {
       const document = frameRef.current.contentDocument;
@@ -27,6 +31,7 @@ export default function PreviewFrame(props: Props) {
           head.appendChild(ref);
         });
       }
+      return body.addEventListener('mouseup', handleMouseUp);
     }
   }, [frameRef, content]);
 
