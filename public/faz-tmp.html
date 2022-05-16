@@ -26,7 +26,6 @@
       line-height: 1.4;
       background-color: #eee;
       color: #333;
-      -webkit-text-size-adjust: none;
     }
 
     /* Layout ------------------------------ */
@@ -75,10 +74,6 @@
       width: 100%;
     }
 
-    .email-body_inner {
-      margin: 0 auto;
-    }
-
     .email-footer {
       color: #fff;
       background-color: #333;
@@ -104,74 +99,12 @@
       padding: 20px 0;
     }
 
-
-    /* Attribute list ------------------------------ */
-
-    .attributes {
-      margin: 0 0 21px;
-    }
-
-    .attributes_content {
-      background-color: #EDEFF2;
-      padding: 16px;
-    }
-
-    .attributes_item {
-      padding: 0;
-    }
-
-    /* Utilities ------------------------------ */
-
-
     /*Media Queries ------------------------------ */
 
     @media only screen and (max-width: 600px) {}
 
     @media only screen and (max-width: 500px) {}
 
-    /* Buttons ------------------------------ */
-
-    /* can customized ------------------------------ */
-
-    .greeding {
-      margin-bottom: 20px;
-    }
-
-    .paragraph {
-      /* color: #74787E; */
-      color: #333;
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
-
-    .alert {
-      background-color: #fff;
-      padding: 20px;
-      display: flex;
-      align-items: center;
-      border-radius: 2px;
-      margin-bottom: 20px;
-    }
-
-    .alert-img {
-      width: 48px;
-      margin-right: 20px;
-    }
-
-    .alert-title {
-      font-size: 20px;
-      font-weight: bold;
-    }
-
-    .alert-info {
-      font-size: 12px;
-    }
-
-    .ending {}
-
-    .ending-title {}
-
-    .ending-name {}
   </style>
 </head>
 
@@ -194,24 +127,21 @@
       <div class="email-body">
         <!-- Body content -->
         <div class="content-cell">
-          <div class="alert">
-            <img src="alert-icon.png" alt="" class="alert-img" />
-            <div class="alert-content">
-              <div class="alert-title">Scheduled Maintenance on April 15th</div>
-              <div class="alert-info">You can view more details in the
-                https://status.fortimanager.forticloud.com </div>
+          <div class="alert" id="alert"
+            style="background-color:white; padding: 20; display: flex; align-items: center; border-radius: 2px; margin-bottom: 20px;">
+            <img id="alert-img" src="alert-icon.png"  data-customized alt="" class="alert-img" style="width: 48px; margin-right: 20px;"/>
+            <div class="alert-content" id="alert-content" >
+              <div id="alert-title" class="alert-title" data-customized style="font-weight: bold; font-size:20px">Scheduled Maintenance on April 15th</div>
+              <div id="alert-info" class="alert-info" data-customized style="font-size:12px">You can view more details in the https://status.fortimanager.forticloud.com </div>
             </div>
 
           </div>
-          <div class="greeding">Dear customer,</div>
-          <p class="paragraph" data-customized> We will be performing infrastructure maintenance affecting
-            FortiManager Cloud Portal in North America Region starting at 2022-4-15, 23:00 UTC. The
-            maintenance should take approximately one hour. There may be some service disruptions
-            when accessing the cloud portal during this window.
+          <div id="greeding" class="greeding" style="margin-bottom: 20px;" data-customized>Dear customer,</div>
+          <p id="main-content" class="paragraph" data-customized> We will be performing infrastructure maintenance affecting FortiManager Cloud Portal in North America Region starting at 2022-4-15, 23:00 UTC. The maintenance should take approximately one hour. There may be some service disruptions when accessing the cloud portal during this window.
           </p>
-          <div class="ending">
-            <div class="ending-title">Sincerely,</div>
-            <div class="ending-name">The Fortinet Team</div>
+          <div class="ending" id="ending">
+            <div id="ending-title" class="ending-title" data-customized>Sincerely,</div>
+            <div id="ending-name" class="ending-name" data-customized>The Fortinet Team</div>
           </div>
         </div>
       </div>

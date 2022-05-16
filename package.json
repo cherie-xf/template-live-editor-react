@@ -8,18 +8,24 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@babel/runtime-corejs3": "^7.17.9",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
+    "@mui/lab": "^5.0.0-alpha.81",
     "@mui/material": "^5.7.0",
+    "@wangeditor/editor": "^5.0.1",
+    "@wangeditor/editor-for-react": "^1.0.2",
     "ace-builds": "^1.4.14",
     "brace": "^0.11.1",
     "handlebars": "^4.7.7",
+    "js-beautify": "^1.14.3",
     "react": "^17.0.2",
     "react-ace": "^9.5.0",
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
     "@types/handlebars": "^4.1.0",
+    "@types/js-beautify": "^1.13.3",
     "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.10",
     "@vitejs/plugin-react": "^1.0.7",

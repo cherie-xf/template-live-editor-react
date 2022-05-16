@@ -1,24 +1,35 @@
-#root, .App, .editor, iframe {
+#root, .App, .wrapper{
   height: 100%;
   width: 100%;
+  border-top: 1px solid red;
+  box-sizing: border-box;
 }
-.App {
-  padding: 50px;
+.wrapper {
+  padding: 50px 50px 100px 50px;
 }
 .previewContainer{
-  width: calc( 100% - 100px);
-  height: calc( 100% - 100px)
-}
-
-
-.previewContainer {
+  box-sizing: border-box;
+  height: 100%;
   display: flex;
+  border: 1px solid #eee;
 }
+
 .editor{
   flex: 1;
-  width: 50%;
 }
 .preview {
   flex: 1;
-  width: 50%;
+}
+iframe {
+  height: 100%;
+  width: 100%;
+  border: none;
+}
+.control-btns {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.btn {
+  margin: 10px 50px
 }

@@ -1,16 +1,47 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
+import beautify from 'js-beautify';
 
 interface Props {
   content: string;
+  setNewContent: React.Dispatch<any>;
   frameStyle?: React.CSSProperties;
   stylesheets?: Array<string>;
+  setEditContent?: React.Dispatch<any>;
+  changeContent?: string;
 }
 export default function EmailFrame(props: Props) {
   const frameRef = useRef<HTMLIFrameElement>(null);
-  const { content, frameStyle, stylesheets } = props;
+  const {
+    content,
+    setNewContent,
+    frameStyle,
+    stylesheets,
+    setEditContent,
+    changeContent
+  } = props;
+  const [currentDomId, setCurrentDomId] = useState<string | null>('');
+
+  const formatCode = (code: string) => {
+    const formatted = beautify(code, {
+      indent_size: 2,
+      space_in_empty_paren: true
+    });
+    console.log('formatted', formatted);
+    return formatted;
+  };
 
   const handleMouseUp = (event: MouseEvent) => {
     console.log(event.target);
+    const dom = event.target as HTMLElement;
+    if (dom.hasAttribute('data-customized') && setEditContent) {
+      // const str = formatCode(dom.outerHTML);
+      dom.style.outline = '';
+      dom.style.cursor = '';
+      dom.removeAttribute('title');
+      const str = dom.outerHTML;
+      setCurrentDomId(dom.getAttribute('id'));
+      setEditContent && setEditContent(str);
+    }
   };
 
   const handleMouseEnter = (event: MouseEvent) => {
@@ -26,14 +57,14 @@ export default function EmailFrame(props: Props) {
   const handleMouseLeave = (event: MouseEvent) => {
     if (event.target) {
       const dom: HTMLElement = event.target as HTMLElement;
-      dom.style.outline = 'none';
-      dom.style.cursor = 'default';
-      dom.setAttribute('title', '');
+      dom.style.outline = '';
+      dom.style.cursor = '';
+      dom.removeAttribute('title');
     }
   };
 
-  useEffect(() => {
-    if (frameRef.current && frameRef.current.contentDocument) {
+  const initIframe = () => {
+    if (frameRef.current?.contentDocument) {
       const document = frameRef.current.contentDocument;
       const head = document.getElementsByTagName('head')[0];
       const body = document.body;
@@ -63,12 +94,56 @@ export default function EmailFrame(props: Props) {
         body.querySelectorAll('[data-customized]').forEach((item: Element) => {
           if (item) {
             const dom = item as HTMLElement;
-            dom.removeEventListener('mouseenter', handleMouseLeave);
+            dom.removeEventListener('mouseenter', handleMouseEnter);
+            dom.removeEventListener('mouseleave', handleMouseLeave);
           }
         });
       };
     }
-  }, [frameRef, content]);
+  };
+  useEffect(() => {
+    initIframe();
+    setTimeout(() => {
+      console.log('================iframe content changed');
+      if (currentDomId && frameRef.current) {
+        const frameDoument = frameRef.current.contentDocument;
+        const body = frameDoument?.body;
+        if (body) {
+          const currentDom = body.querySelector(`#${currentDomId}`);
+          const str = currentDom?.outerHTML;
+          setEditContent && setEditContent(str);
+        }
+      }
+    });
+  }, [content]);
+
+  useEffect(() => {
+    console.log('----------- first load');
+    setCurrentDomId('');
+    initIframe();
+    // }, [frameRef, content]);
+  }, [frameRef]);
+
+  useEffect(() => {
+    if (frameRef.current?.contentDocument && changeContent && currentDomId) {
+      const frameDoument = frameRef.current.contentDocument;
+      const body = frameDoument.body;
+      const currentDom = body.querySelector(`#${currentDomId}`);
+      if (currentDom?.tagName === 'IMG') {
+        const newSrc = getImgAttribute(changeContent, 'src');
+        const newStyle = getImgAttribute(changeContent, 'style');
+        const newAlt = getImgAttribute(changeContent, 'alt');
+        const newDataHref = getImgAttribute(changeContent, 'data-href');
+        newSrc && currentDom.setAttribute('src', newSrc);
+        newStyle && currentDom.setAttribute('style', newStyle);
+        newAlt && currentDom.setAttribute('alt', newAlt);
+        newDataHref && currentDom.setAttribute('data-href', newDataHref);
+      } else if (currentDom && currentDom.innerHTML !== changeContent) {
+        currentDom.innerHTML = changeContent;
+      }
+      setNewContent(body.innerHTML);
+    }
+  }, [changeContent]);
 
   return (
     <div className="preview">
@@ -76,3 +151,17 @@ export default function EmailFrame(props: Props) {
     </div>
   );
 }
+
+const getImgAttribute = (source: string, name: string): string | undefined => {
+  const regrexMap: Record<string, any> = {
+    src: /src="(.*?)"/,
+    alt: /alt="(.*?)"/,
+    style: /style="(.*?)"/,
+    'data-href': /data-href="(.*?)"/
+  };
+  if (source && name && regrexMap[name]) {
+    const arr = source.match(regrexMap[name]);
+    return arr?.[1];
+  }
+  return undefined;
+};
