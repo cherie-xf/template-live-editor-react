@@ -6,7 +6,9 @@ import { Editor, Toolbar } from '@wangeditor/editor-for-react';
 import {
   IDomEditor,
   IEditorConfig,
-  i18nChangeLanguage
+  i18nChangeLanguage,
+  SlateElement,
+  Boot
 } from '@wangeditor/editor';
 import '@wangeditor/editor/dist/css/style.css';
 import AceEditor from 'react-ace';
@@ -47,17 +49,10 @@ export const HtmlPreview = () => {
     const contentStr = JSON.stringify(content);
     console.log('editor on change', editor.getHtml());
     if (editor.getHtml()) {
-      const html = editor
-        .getHtml()
-        .replace(/<\/p>$/, '')
-        .replace(/^<p>/, '')
-        .replace(/[&]nbsp[;]/gi, ' ');
-      console.log('---------- after replaces ', html);
-      setChangeContent({ outer: '', inner: html });
+      const html = editor.getHtml();
     }
   };
   const handleHtmlChange = (val: string) => {
-    // setEditContent(val);
     setHtmlEditValue(val);
     const html = val
       .trim()
@@ -114,6 +109,22 @@ export const HtmlPreview = () => {
     console.log('editContent update', editContent);
   }, [editContent]);
 
+  const paragraphToHtml = (
+    elem: SlateElement,
+    childrenHtml: string
+  ): string => {
+    if (childrenHtml === '') {
+      // return '<p><br/></p>'
+      return '';
+    }
+    // return `<p>${childrenHtml}</p>`
+    return childrenHtml.replace(/[&]nbsp[;]/gi, ' ');
+  };
+  const elemToHtmlConf = {
+    type: 'paragraph',
+    elemToHtml: paragraphToHtml
+  };
+  Boot.registerElemToHtml(elemToHtmlConf);
   const toolbarConfig = {};
   const editorConfig: Partial<IEditorConfig> = {
     placeholder: 'click preview to begin editing...'
