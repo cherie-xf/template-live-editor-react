@@ -1,13 +1,11 @@
 import { useRef, useEffect, useState } from 'react';
-import beautify from 'js-beautify';
-
 interface Props {
   content: string;
   setNewContent: React.Dispatch<any>;
   frameStyle?: React.CSSProperties;
   stylesheets?: Array<string>;
   setEditContent?: React.Dispatch<any>;
-  changeContent?: string;
+  changeContent?: Record<string, string>;
 }
 export default function EmailFrame(props: Props) {
   const frameRef = useRef<HTMLIFrameElement>(null);
@@ -21,25 +19,16 @@ export default function EmailFrame(props: Props) {
   } = props;
   const [currentDomId, setCurrentDomId] = useState<string | null>('');
 
-  const formatCode = (code: string) => {
-    const formatted = beautify(code, {
-      indent_size: 2,
-      space_in_empty_paren: true
-    });
-    console.log('formatted', formatted);
-    return formatted;
-  };
-
   const handleMouseUp = (event: MouseEvent) => {
     const dom = event.target as HTMLElement;
     if (dom.hasAttribute('data-customized') && setEditContent) {
       dom.style.outline = '';
       dom.style.cursor = '';
       dom.removeAttribute('title');
-      const str = dom.outerHTML;
-      console.log('mouse click, dom outerHTML: ', str);
       setCurrentDomId(dom.getAttribute('id'));
-      setEditContent && setEditContent(str);
+      setEditContent &&
+        setEditContent({ inner: dom.innerHTML, outer: dom.outerHTML });
+      console.log('mouse click, dom outerHTML: ', dom.outerHTML);
     }
   };
 
@@ -107,9 +96,10 @@ export default function EmailFrame(props: Props) {
         const frameDoument = frameRef.current.contentDocument;
         const body = frameDoument?.body;
         if (body) {
-          const currentDom = body.querySelector(`#${currentDomId}`);
-          const str = currentDom?.outerHTML;
-          setEditContent && setEditContent(str);
+          const dom = body.querySelector(`#${currentDomId}`);
+          setEditContent &&
+            dom &&
+            setEditContent({ inner: dom.innerHTML, outer: dom.outerHTML });
         }
       }
     });
@@ -127,18 +117,24 @@ export default function EmailFrame(props: Props) {
       const frameDoument = frameRef.current.contentDocument;
       const body = frameDoument.body;
       const currentDom = body.querySelector(`#${currentDomId}`);
-      if (currentDom?.tagName === 'IMG') {
-        const newSrc = getImgAttribute(changeContent, 'src');
-        const newStyle = getImgAttribute(changeContent, 'style');
-        const newAlt = getImgAttribute(changeContent, 'alt');
-        const newDataHref = getImgAttribute(changeContent, 'data-href');
+      const source = changeContent.inner || changeContent.outer;
+      if (currentDom?.tagName === 'IMG' && source) {
+        const newSrc = getImgAttribute(source, 'src');
+        const newStyle = getImgAttribute(source, 'style');
+        const newAlt = getImgAttribute(source, 'alt');
+        const newDataHref = getImgAttribute(source, 'data-href');
         newSrc && currentDom.setAttribute('src', newSrc);
         newStyle && currentDom.setAttribute('style', newStyle);
         newAlt && currentDom.setAttribute('alt', newAlt);
         newDataHref && currentDom.setAttribute('data-href', newDataHref);
-      } else if (currentDom && currentDom.innerHTML !== changeContent) {
+      } else if (currentDom && source) {
         console.log('------------ changeContent listen', changeContent);
-        currentDom.innerHTML = changeContent;
+        if (changeContent.inner) {
+          currentDom.innerHTML = changeContent.inner;
+        }
+        if (changeContent.outer) {
+          currentDom.outerHTML = changeContent.outer;
+        }
       }
       setNewContent(body.innerHTML);
     }
