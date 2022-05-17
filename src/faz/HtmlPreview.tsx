@@ -21,6 +21,7 @@ export const HtmlPreview = () => {
   const [newhtml, setNewHtml] = useState<string>('');
   const [editor, setEditor] = useState<IDomEditor | null>(null);
   const [editContent, setEditContent] = useState<string>('');
+  // const [editHtmlContent, setEditHtmlContent] = useState<string>('');
   const [changeContent, setChangeContent] = useState<string>('');
   const [tab, setTab] = useState<string>('text-editor');
 
@@ -34,7 +35,10 @@ export const HtmlPreview = () => {
   const handleChange = (editor: IDomEditor) => {
     // selected text
     const selectionText = editor.getSelectionText();
+    const content = editor.children;
+    const contentStr = JSON.stringify(content);
     console.log('editor on change', editor.getHtml());
+    console.log('editor on change contentStr', contentStr);
     if (editor.getHtml()) {
       const html = editor
         .getHtml()

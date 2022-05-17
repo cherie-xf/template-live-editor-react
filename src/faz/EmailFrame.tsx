@@ -31,21 +31,19 @@ export default function EmailFrame(props: Props) {
   };
 
   const handleMouseUp = (event: MouseEvent) => {
-    console.log(event.target);
     const dom = event.target as HTMLElement;
     if (dom.hasAttribute('data-customized') && setEditContent) {
-      // const str = formatCode(dom.outerHTML);
       dom.style.outline = '';
       dom.style.cursor = '';
       dom.removeAttribute('title');
       const str = dom.outerHTML;
+      console.log('mouse click, dom outerHTML: ', str);
       setCurrentDomId(dom.getAttribute('id'));
       setEditContent && setEditContent(str);
     }
   };
 
   const handleMouseEnter = (event: MouseEvent) => {
-    console.log('mouse over', event.target);
     if (event.target) {
       const dom: HTMLElement = event.target as HTMLElement;
       dom.style.outline = '1px dotted red';
@@ -139,6 +137,7 @@ export default function EmailFrame(props: Props) {
         newAlt && currentDom.setAttribute('alt', newAlt);
         newDataHref && currentDom.setAttribute('data-href', newDataHref);
       } else if (currentDom && currentDom.innerHTML !== changeContent) {
+        console.log('------------ changeContent listen', changeContent);
         currentDom.innerHTML = changeContent;
       }
       setNewContent(body.innerHTML);
