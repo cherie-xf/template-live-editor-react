@@ -50,6 +50,7 @@ export const HtmlPreview = () => {
     console.log('editor on change', editor.getHtml());
     if (editor.getHtml()) {
       const html = editor.getHtml();
+    setChangeContent({ inner: html, outer: '' });
     }
   };
   const handleHtmlChange = (val: string) => {
